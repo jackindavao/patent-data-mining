@@ -40,6 +40,7 @@ Setting up a corpus of full-text patent documents
 
 The full text corpora comprise two large flat text files each containing an entire dataset (one file for issued patents, named pat.txt, and one for issued applications, named app.txt). In this flat file, each field is represented as a single newline-terminated line. Each line begins with a 6-character identifier in the form XXXX:: followed by a space. This identifier indicates the field. As an example here are a few lines from one record:
 
+```
 TITL:: Eyewear with rigid lens support
 DTYP:: pat
 ATYP:: utility
@@ -49,6 +50,7 @@ APNO:: 13465272
 . . . .
 INVS:: CALILUNG RYAN|JANAVICIUS JASON
 LREP:: KNOBBE MARTENS OLSON & BEAR, LLP
+```
 
 Each document is terminated by an ENDRECORD line. A short sample file of a few records (2000 lines) is included as head_pat.txt.
 
@@ -75,6 +77,7 @@ The field identifiers used in the flat files are as follows. (Some of these corr
 List of fields and class heirarchy
 All fields are string, including numbers
 
+```
 **Document**
 appQ   is doc an app (T) or patent (F)
 bib      bibliographic section, a Bibio object
@@ -140,6 +143,7 @@ CLDL  maxclilen
 CLIL  maxcldlen
 NCLI  ncli
 NCLD  ncld
+```
 
 I have posted here the relevant DTD files. Also posted is a file xml_outline.txt that summarizes the main xml elements in outline form. (DTD patent-grant-v44-2013-05-16.txt and 
 DTD US Patent Application Publications v43 2012-12-04.dtd.txt). 
