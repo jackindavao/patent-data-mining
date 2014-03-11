@@ -154,6 +154,32 @@ ParsePTOXMLtoFlatFile.py
 This is the driver code that sets up the parse using PyPatUtils.py. The variables pertaining to file hierarchy and settings are described in the file.
 
 
+Utilities For Handling PAIR Archives
+------------------------------------
+
+The US Patent Office maintains an official file for each patent application. The file contains the application papers as well as all of the documents filed by the applicant or produced by the Patent Office during examination. These files become publicly available (in most cases) about 18 months after the application is filed, and in any case once a patent is issued. The Patent Office provides access through its [PAIR] ((http://www.uspto.gov/portal-home.jsp)) (Patent Application Information Retrieval) portal.
+
+These files embody a great deal of useful information about patent examining procedure, since they provide a record of what the Patent Office has done in actual cases. Unfortunately, they are not searchable. They are impracticable to access in bulk on the PTO site; the files are large (typically in the 5 - 30M range), and the site is Capcha protected and does not lend itself readily to spidering or scraping.
+
+However, Google has made available individual zip archives of a large number of PAIR files [here](http://www.google.com/googlebooks/uspto-patents-pair.html). These zip archives are easily downloaded using an URL in the form http://storage.googleapis.com/uspto-pair/applications/APP_NUM.zip, where APP_NUM is replaced with the application number of the file being sought. However, PAIR archives are not available for many application numbers. It is possible to obtain a list of the 5,200,000 available archives using a utility described on the google download page, which can also download archives, but that approach did not entirely fit my needs so I took a different approach.
+
+Posted here is a utility, MakePAIRDownloadList, to facilitate downloading a large corpus of PAIR archives. This is a VB.net 2010 application and operates as follows:
+
+1. It first generates a list of application numbers of issued patents (the application number is not the same as the patent number) by scanning the pat.txt flat file described above in reverse chronological order. Since pat.txt includes only issued patents, this assures that we get PAIR files representing the entire examination process, and not partial archives, and that they are the most recent ones available.
+2. It then checks the folder containing the already downloaded archives and removes those from the download list.
+3. Next for each application number in the list it makes an HTTP request on the download site to determine whether an archive is available for that number and if so what size it is. This is done because some archives are extremely large -- 100M or more -- usually because they include a large number of foreign references (pdf's of journal articles, etc.), which are not useful for my purposes, so I impose an arbitrary size cutoff.
+4. It outputs a list of URLs suitable for wget, for the applications that pass the above filters.
+
+The archives can then be easily downloaded in bulk using [wget](http://gnuwin32.sourceforge.net/packages/wget.htm). Using this method I have downloaded ~10,000 archives.
+
+Also posted is a simple utility, listPAIRdocs.py, to scan through all of the downloaded archives and output a list of the archived documents, showing application number, date, and document type of each. The USPTO categorizes all documents using type codes which are listed [here]( http://www.uspto.gov/ebc/portal/ifw-tab-doccodes.html) and which form part of the filename. The document list can be searched for particular document types or patterns of interest using simple Python scripts or in any other preferred way. I have posted one example of such a script, in this case to find instances of two particular document types occuring within a specified time window. See searchPAIRidx.py.
+
+(To merely find single document types, Windows 7's search utility works well, but must be set to search within zip archives. This has the advantage that the found documents can be viewed in the Windows Explorer preview pane.) 
+
+I have not yet figured out any good way to search document content. Unfortunately, all documents are in pdf format and are not searchable without first doing OCR. I have not found a practicable way to do bulk OCR on a few hundred thousand pdf's. If anyone has any good ideas, I would be very happy to hear them. 
+
+
+
 
 
 
